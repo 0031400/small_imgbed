@@ -1,0 +1,13 @@
+{
+    "server": {
+        "addr": "127.0.0.1",
+        "port": 3000
+    },
+    "data": {
+        "path": "data"
+    },
+    "auth": {
+        "username": "username",
+        "password": "password"
+    }
+}

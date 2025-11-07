@@ -26,10 +26,20 @@ func Save(filename string, f multipart.File) string {
 	}
 	return filename
 }
-func Get(filePath string) []byte {
-	b, err := os.ReadFile(filePath)
+func Get(p string) []byte {
+	b, err := os.ReadFile(filepath.Join(config.C.Data.Path, p))
 	if err != nil {
 		log.Panicln(err)
 	}
 	return b
+}
+func Exit(p string) bool {
+	_, err := os.Stat(filepath.Join(config.C.Data.Path, p))
+	if os.IsNotExist(err) {
+		return false
+	}
+	if err != nil {
+		log.Panicln(err)
+	}
+	return true
 }

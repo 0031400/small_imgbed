@@ -8,7 +8,8 @@ import (
 
 func SetUpRouter() http.Handler {
 	r := http.NewServeMux()
-	r.Handle("POST /upload", middleware.Auth(handler.Upload()))
-	r.Handle("GET /", handler.Get())
-	return r
+	r.Handle("/login", middleware.Cors(middleware.Auth(handler.Login())))
+	r.Handle("/upload", middleware.Cors(middleware.Auth(handler.Upload())))
+	r.Handle("/", handler.Get())
+	return middleware.Recover(r)
 }

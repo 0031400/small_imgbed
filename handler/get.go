@@ -10,11 +10,15 @@ func Get() http.Handler {
 	router := http.NewServeMux()
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		p := r.URL.Path
-		if strings.HasPrefix(p, "/") {
-			w.Write(storage.Get(p[1:]))
+		if !strings.HasPrefix(p, "/") {
+			w.WriteHeader(400)
 			return
 		}
-		w.WriteHeader(400)
+		if !storage.Exit(p[1:]) {
+			w.WriteHeader(404)
+			return
+		}
+		w.Write(storage.Get(p[1:]))
 	})
 	return router
 }

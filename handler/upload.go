@@ -9,7 +9,7 @@ import (
 
 func Upload() http.Handler {
 	router := http.NewServeMux()
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("POST /", func(w http.ResponseWriter, r *http.Request) {
 		f, h, err := r.FormFile("file")
 		if err != nil {
 			log.Panicln(err)

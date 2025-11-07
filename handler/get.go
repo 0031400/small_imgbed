@@ -14,7 +14,7 @@ func Get() http.Handler {
 			w.WriteHeader(400)
 			return
 		}
-		if !storage.Exit(p[1:]) {
+		if !storage.FileExit(p[1:]) {
 			w.WriteHeader(404)
 			return
 		}

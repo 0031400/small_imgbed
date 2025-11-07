@@ -11,5 +11,5 @@ func SetUpRouter() http.Handler {
 	r.Handle("/login", middleware.Cors(middleware.Auth(handler.Login())))
 	r.Handle("/upload", middleware.Cors(middleware.Auth(handler.Upload())))
 	r.Handle("/", handler.Get())
-	return middleware.Recover(r)
+	return middleware.Recover(middleware.Log(r))
 }

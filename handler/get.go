@@ -63,9 +63,12 @@ func Get() http.Handler {
 					return
 				}
 				defer file.Close()
-				mw := io.MultiWriter(w, file)
-				io.Copy(mw, resp.Body)
-				return
+				_, err = io.Copy(file, resp.Body)
+				if err != nil {
+					log.Println(err)
+					w.WriteHeader(500)
+					return
+				}
 			}
 			w.WriteHeader(404)
 			return

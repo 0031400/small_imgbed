@@ -19,9 +19,10 @@ type Data struct {
 	Path string `json:"path"`
 }
 type Config struct {
-	Server Server `json:"server"`
-	Auth   Auth   `json:"auth"`
-	Data   Data   `json:"data"`
+	Server Server            `json:"server"`
+	Auth   Auth              `json:"auth"`
+	Data   Data              `json:"data"`
+	Mime   map[string]string `json:"mime"`
 }
 
 var C = Config{}

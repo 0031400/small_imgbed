@@ -44,6 +44,13 @@ func Get() http.Handler {
 			w.WriteHeader(500)
 			return
 		}
+		ext := filepath.Ext(absPath)
+		if len(ext) > 0 {
+			ext = ext[1:]
+		}
+		if mime, ok := config.C.Mime[ext]; ok {
+			w.Header().Set("Content-Type", mime)
+		}
 		w.Write(b)
 	})
 	return router

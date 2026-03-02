@@ -2,44 +2,47 @@ package storage
 
 import (
 	"io"
-	"log"
 	"mime/multipart"
 	"os"
 	"path/filepath"
 	"small_imgbed/config"
 )
 
-func Save(filename string, f multipart.File) string {
+func Save(filename string, f multipart.File) (string, error) {
 	b, err := io.ReadAll(f)
 	if err != nil {
-		log.Panicln(err)
+		return "", err
 	}
 	f.Close()
 	newFilePath := filepath.Join(config.C.Data.Path, filename)
 	err = os.MkdirAll(filepath.Dir(newFilePath), os.ModePerm)
 	if err != nil {
-		log.Panicln(err)
+		return "", err
 	}
 	err = os.WriteFile(newFilePath, b, os.ModePerm)
 	if err != nil {
-		log.Panicln(err)
+		return "", err
 	}
-	return filename
+	return filename, nil
 }
-func Get(p string) []byte {
-	b, err := os.ReadFile(filepath.Join(config.C.Data.Path, p))
+func GetPath(p string) string {
+	return filepath.Join(config.C.Data.Path, p)
+
+}
+func Get(p string) ([]byte, error) {
+	b, err := os.ReadFile(p)
 	if err != nil {
-		log.Panicln(err)
+		return nil, err
 	}
-	return b
+	return b, nil
 }
-func FileExit(p string) bool {
-	s, err := os.Stat(filepath.Join(config.C.Data.Path, p))
+func FileExit(p string) (bool, error) {
+	s, err := os.Stat(p)
 	if os.IsNotExist(err) {
-		return false
+		return false, nil
 	}
 	if err != nil {
-		log.Panicln(err)
+		return false, err
 	}
-	return !s.IsDir()
+	return !s.IsDir(), nil
 }

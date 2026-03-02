@@ -2,7 +2,9 @@ package handler
 
 import (
 	"io"
+	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"small_imgbed/config"
 	"small_imgbed/internal/storage"
@@ -36,6 +38,35 @@ func Get() http.Handler {
 			return
 		}
 		if !exit {
+			if config.C.Server.CopySite != "" {
+				resp, err := http.Get(config.C.Server.CopySite + r.URL.Path)
+				if err != nil {
+					log.Println(err)
+					w.WriteHeader(500)
+					return
+				}
+				defer resp.Body.Close()
+				if resp.StatusCode == 404 {
+					w.WriteHeader(404)
+					return
+				}
+				err = os.MkdirAll(filepath.Dir(absPath), 0755)
+				if err != nil {
+					log.Println(err)
+					w.WriteHeader(500)
+					return
+				}
+				file, err := os.OpenFile(absPath, os.O_CREATE|os.O_WRONLY, 0666)
+				if err != nil {
+					log.Println(err)
+					w.WriteHeader(500)
+					return
+				}
+				defer file.Close()
+				mw := io.MultiWriter(w, file)
+				io.Copy(mw, resp.Body)
+				return
+			}
 			w.WriteHeader(404)
 			return
 		}

@@ -11,6 +11,7 @@ type Server struct {
 	Addr     string `json:"addr"`
 	Port     int    `json:"port"`
 	RootHtml bool   `json:"rootHtml"`
+	CopySite string `json:"copySite"`
 }
 type Auth struct {
 	Username string `json:"username"`

@@ -12,9 +12,8 @@ func Get() http.Handler {
 	router := http.NewServeMux()
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		p := r.URL.Path
-		if !strings.HasPrefix(p, "/") {
-			w.WriteHeader(400)
-			return
+		if p == "/" && config.C.Server.RootHtml {
+			p = "/index.html"
 		}
 		absPath, err := filepath.Abs(storage.GetPath(p[1:]))
 		if err != nil {

@@ -8,8 +8,9 @@ import (
 )
 
 type Server struct {
-	Addr string `json:"addr"`
-	Port int    `json:"port"`
+	Addr     string `json:"addr"`
+	Port     int    `json:"port"`
+	RootHtml bool   `json:"rootHtml"`
 }
 type Auth struct {
 	Username string `json:"username"`

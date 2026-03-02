@@ -29,12 +29,12 @@ func GetPath(p string) string {
 	return filepath.Join(config.C.Data.Path, p)
 
 }
-func Get(p string) ([]byte, error) {
-	b, err := os.ReadFile(p)
+func Get(p string) (io.ReadCloser, error) {
+	f, err := os.Open(p)
 	if err != nil {
 		return nil, err
 	}
-	return b, nil
+	return f, nil
 }
 func FileExit(p string) (bool, error) {
 	s, err := os.Stat(p)

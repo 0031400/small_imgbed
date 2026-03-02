@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"io"
 	"net/http"
 	"path/filepath"
 	"small_imgbed/config"
@@ -38,11 +39,12 @@ func Get() http.Handler {
 			w.WriteHeader(404)
 			return
 		}
-		b, err := storage.Get(absPath)
+		f, err := storage.Get(absPath)
 		if err != nil {
 			w.WriteHeader(500)
 			return
 		}
+		defer f.Close()
 		ext := filepath.Ext(absPath)
 		if len(ext) > 0 {
 			ext = ext[1:]
@@ -50,7 +52,7 @@ func Get() http.Handler {
 		if mime, ok := config.C.Mime[ext]; ok {
 			w.Header().Set("Content-Type", mime)
 		}
-		w.Write(b)
+		io.Copy(w, f)
 	})
 	return router
 }

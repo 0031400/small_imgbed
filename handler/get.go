@@ -69,9 +69,10 @@ func Get() http.Handler {
 					w.WriteHeader(500)
 					return
 				}
+			} else {
+				w.WriteHeader(404)
+				return
 			}
-			w.WriteHeader(404)
-			return
 		}
 		f, err := storage.Get(absPath)
 		if err != nil {
